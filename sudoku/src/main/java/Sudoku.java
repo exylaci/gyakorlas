@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-/*
-A 2021. október 26-ai emelt szintű informatika érettségi 4. feladata
- */
+// A 2021. október 26-ai emelt szintű informatika érettségi 4. feladata
+
 public class Sudoku {
     private int[][] sheet = new int[9][9];
     private List<Step> steps = new ArrayList<>();
@@ -16,8 +15,11 @@ public class Sudoku {
     private String filename;
     Scanner scanner;
 
-    private Sudoku(Scanner scanner) {
+    public Sudoku(Scanner scanner, int[][]... sheet) {
         this.scanner = scanner;
+        if (sheet.length > 0) {
+            this.sheet = sheet[0];
+        }
     }
 
     public static void main(String[] args) {
@@ -29,7 +31,11 @@ public class Sudoku {
         sudoku.feladat5();                          //A fájlban szereplő lépések lehetségesek-e?
     }
 
-    private Coordinate feladat1() {
+    public String getFilename() {
+        return filename;
+    }
+
+    public Coordinate feladat1() {
         System.out.print("\n1. feladat\nAdja meg a bemeneti fájl nevét! ");
         filename = scanner.nextLine();
 
@@ -97,11 +103,11 @@ public class Sudoku {
         System.out.printf("A hely a(z) %d résztáblázathoz tartozik.\n", getSubSheetNumber(coordinate));
     }
 
-    private int getSubSheetNumber(Coordinate coordinate) {
+    public int getSubSheetNumber(Coordinate coordinate) {
         return (coordinate.getColumn() - 1) / 3 + ((coordinate.getRow() - 1) / 3) * 3 + 1;
     }
 
-    private void feladat4() {
+    public void feladat4() {
         System.out.println("\n4. feladat");
         int empty = 0;
         for (int row = 0; row < 9; ++row) {
@@ -111,7 +117,7 @@ public class Sudoku {
                 }
             }
         }
-        System.out.printf("Az üres helyek aránya: %.1f%%\n", 100.0 * empty / 81);
+        System.out.printf("Az üres helyek aránya: %.1f%%\n", 100 * empty / 81.0);
     }
 
     private void feladat5() {
