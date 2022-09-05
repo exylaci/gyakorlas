@@ -12,7 +12,7 @@ public class Sudoku {
     private int[][] sheet = new int[9][9];
     private List<Step> steps = new ArrayList<>();
 
-    private String filename;
+    private Path filename;
     Scanner scanner;
 
     public Sudoku(Scanner scanner, int[][]... sheet) {
@@ -31,13 +31,33 @@ public class Sudoku {
         sudoku.feladat5();                          //A fájlban szereplő lépések lehetségesek-e?
     }
 
-    public String getFilename() {
+    public Path getFilename() {
         return filename;
+    }
+
+    public void setFilename(Path filename) {
+        this.filename = filename;
+    }
+
+    protected String getSheet() {
+        StringBuilder result = new StringBuilder();
+        for (int row = 0; row < 9; ++row) {
+            for (int column = 0; column < 9; ++column) {
+                result.append(sheet[row][column]);
+                if (column < 8) {
+                    result.append(" ");
+                }
+            }
+            if (row < 8) {
+                result.append("\n");
+            }
+        }
+        return result.toString();
     }
 
     public Coordinate feladat1() {
         System.out.print("\n1. feladat\nAdja meg a bemeneti fájl nevét! ");
-        filename = scanner.nextLine();
+        filename = Path.of(scanner.nextLine());
 
         System.out.print("Adja meg egy sor számát! ");
         int row = scanner.nextInt();
@@ -48,11 +68,11 @@ public class Sudoku {
         return new Coordinate(row, column);
     }
 
-    private void feladat2() {
-        filename = "C:\\temp\\infoerettsegi\\2021 okt emelt\\4_Sudoku\\nehez.txt";
-        System.out.println("\n2. feladat\nFájl beolvasása: " + filename);
+    protected void feladat2() {
+        // filename = Path.of( "C:\\temp\\infoerettsegi\\2021 okt emelt\\4_Sudoku\\nehez.txt");
+        System.out.println("\n2. feladat\nFájl beolvasása: " + filename.toString());
 
-        try (BufferedReader reader = Files.newBufferedReader(Path.of(filename))) {
+        try (BufferedReader reader = Files.newBufferedReader(filename)) {
             for (int i = 0; i < 9; ++i) {
                 storeOneLine(i, reader.readLine());
             }
@@ -61,7 +81,7 @@ public class Sudoku {
                 steps.add(new Step(oneLine));
             }
         } catch (IOException e) {
-            System.out.println("Nem olvasható ez a file: " + filename);
+            System.out.println("Nem olvasható ez a file: " + filename.toString());
         }
 
         displaySheet();
